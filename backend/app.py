@@ -96,9 +96,9 @@ def poll_api(endpoint, frequency, duration):
     print("🟢 poll_api thread started")
     polling_status["end_time"] = time.time() + duration
 
-    interval = duration / frequency  # time between each call
+    # interval = duration / frequency  # time between each call
 
-    for i in range(frequency):
+    for i in range(duration*frequency):
         if not polling_status["isActive"]:
             break
         try:
@@ -118,8 +118,8 @@ def poll_api(endpoint, frequency, duration):
         except Exception as e:
             print("🔴 Polling error:", str(e))
 
-        if i < frequency - 1:
-            time.sleep(interval)
+        # if i < frequency - 1:
+        #     time.sleep(interval)
 
     polling_status["isActive"] = False
     polling_status["remainingTime"] = 0
