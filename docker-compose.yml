@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: flaskdb
+      MYSQL_USER: flaskuser
+      MYSQL_PASSWORD: flaskpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app_net
+
+  backend:
+    build: ./backend
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=flaskuser
+      - MYSQL_PASSWORD=flaskpassword
+      - MYSQL_DB=flaskdb
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app_net
+    ports:
+      - 5000:5000
+
+  frontend:
+    build: ./react-app
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
+
+volumes:
+  mysql_data:
