@@ -302,6 +302,7 @@ function App() {
                 <div className="card-content">
                   {/* <p><strong>Type:</strong> {item.type || 'N/A'}</p>
                   <p><strong>Participants:</strong> {item.participants ?? 'N/A'}</p> */}
+                  <p><strong>ID:</strong> {index + 1}</p>
                   <p><strong>Time:</strong> {new Date(item.timestamp).toLocaleTimeString()}</p>
                 </div>
               </div>
