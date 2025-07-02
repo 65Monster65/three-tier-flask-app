@@ -5,7 +5,7 @@ function App() {
   const apiBaseUrl = '/api';
   const [endpoint, setEndpoint] = useState('https://lorem-api.com/api/uid');
   const [frequency, setFrequency] = useState('5');
-  const [duration, setDuration] = useState('30');
+  const [duration, setDuration] = useState('3');
   const [message, setMessage] = useState({ text: '', type: '' });
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,6 @@ function App() {
     isActive: false,
     frequency: 0,
     remainingTime: 0,
-    currentLoop: 0,
     totalLoops: 0
   });
   const [lastFetchTime, setLastFetchTime] = useState(null);
@@ -251,7 +250,7 @@ function App() {
           <div className="progress-info">
             {/* <p className="subheader">Polling Started... </p> */}
             {<span>Polling Started...</span>}
-            {/* <span>Loop {pollingStatus.currentLoop} of {pollingStatus.totalLoops}</span> */}
+            {/* <span>remaining {pollingStatus.currentLoop} of {pollingStatus.totalLoops}</span> */}
             {/* <span>{pollingStatus.remainingTime}s remaining</span> */}
           </div>
         </div>
@@ -301,8 +300,8 @@ function App() {
               <div className="card" key={`${item.timestamp}-${index}`}>
                 <h3>{item.activity || 'No activity name'}</h3>
                 <div className="card-content">
-                  <p><strong>Type:</strong> {item.type || 'N/A'}</p>
-                  <p><strong>Participants:</strong> {item.participants ?? 'N/A'}</p>
+                  {/* <p><strong>Type:</strong> {item.type || 'N/A'}</p>
+                  <p><strong>Participants:</strong> {item.participants ?? 'N/A'}</p> */}
                   <p><strong>Time:</strong> {new Date(item.timestamp).toLocaleTimeString()}</p>
                 </div>
               </div>
