@@ -248,10 +248,7 @@ function App() {
             ></div>
           </div> */}
           <div className="progress-info">
-            {/* <p className="subheader">Polling Started... </p> */}
             {<span>Polling Started...</span>}
-            {/* <span>remaining {pollingStatus.currentLoop} of {pollingStatus.totalLoops}</span> */}
-            {/* <span>{pollingStatus.remainingTime}s remaining</span> */}
           </div>
         </div>
       )}
