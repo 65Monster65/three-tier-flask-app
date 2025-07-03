@@ -28,4 +28,6 @@ jobs:
       with:
         context: ./react-app
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+          ${{ secrets.DOCKER_USERNAME }}/frontend:${{ github.sha::7 }}
