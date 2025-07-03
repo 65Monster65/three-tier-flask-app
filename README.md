@@ -1,0 +1,3 @@
+# A Flask Application
+## Overview
+This is an API polling application designed to efficiently make requests to a specified API, retrieve the necessary data, and subsequently store that data into a MySQL database for further processing and analysis. The application leverages the capabilities of the Flask framework, enabling seamless interaction with the API while ensuring that data is organized and accessible within the MySQL relational database structure. By implementing this architecture, the application not only facilitates data retrieval but also enhances the overall management and utilization of the collected information.
