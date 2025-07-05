@@ -7,6 +7,7 @@ import json
 import ssl
 import sys
 import traceback
+import os
 import mysql.connector
 from urllib3.util.ssl_ import create_urllib3_context
 from datetime import datetime
@@ -16,10 +17,10 @@ CORS(app)
 
 # MySQL config
 DB_CONFIG = {
-    'host': 'mysql',
-    'user': 'flaskuser',
-    'password': 'flaskpassword',
-    'database': 'flaskdb'
+    'host': os.environ.get('MYSQL_HOST', 'localhost'),
+    'user': os.environ.get('MYSQL_USER', 'flaskuser'),
+    'password': os.environ.get('MYSQL_PASSWORD', 'flaskpassword'),
+    'database': os.environ.get('MYSQL_DATABASE', 'flaskdb')
 }
 
 # SSL config
@@ -45,7 +46,22 @@ polling_status = {
 
 # Create table if not exists
 def initialize_database():
+    db_name = os.environ.get('MYSQL_DATABASE')
+
     try:
+        # Step 1: Connect without specifying database
+        conn = mysql.connector.connect(
+            host=os.environ.get('MYSQL_HOST'),
+            user=os.environ.get('MYSQL_USER'),
+            password=os.environ.get('MYSQL_PASSWORD')
+        )
+        cursor = conn.cursor()
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+        print(f"✅ Database '{db_name}' exists or created")
+        cursor.close()
+        conn.close()
+
+        # Step 2: Reconnect using database name
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
         cursor.execute("""
@@ -61,15 +77,18 @@ def initialize_database():
         conn.commit()
         cursor.close()
         conn.close()
-        print("✅ Database table ready")
+        print("✅ Table 'api_responses' is ready")
         return True
+
     except mysql.connector.Error as err:
         print(f"🔴 DB init error: {err}")
         return False
 
+# Ensure DB is ready on startup
 if not initialize_database():
+    print("🔴 Failed to initialize database, exiting.")
     sys.exit(1)
-
+    
 # Insert into MySQL
 def insert_into_db(data_dict):
     try:
