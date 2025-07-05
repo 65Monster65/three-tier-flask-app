@@ -16,10 +16,10 @@ CORS(app)
 
 # MySQL config
 DB_CONFIG = {
-    'host': 'mysql',
-    'user': 'flaskuser',
-    'password': 'flaskpassword',
-    'database': 'flaskdb'
+    'host': os.environ.get('MYSQL_HOST', 'localhost'),
+    'user': os.environ.get('MYSQL_USER', 'flaskuser'),
+    'password': os.environ.get('MYSQL_PASSWORD', 'flaskpassword'),
+    'database': os.environ.get('MYSQL_DATABASE', 'flaskdb')
 }
 
 # SSL config
