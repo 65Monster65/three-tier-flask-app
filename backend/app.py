@@ -7,6 +7,7 @@ import json
 import ssl
 import sys
 import traceback
+import os
 import mysql.connector
 from urllib3.util.ssl_ import create_urllib3_context
 from datetime import datetime
