@@ -84,7 +84,11 @@ def initialize_database():
         print(f"🔴 DB init error: {err}")
         return False
 
-
+# Ensure DB is ready on startup
+if not initialize_database():
+    print("🔴 Failed to initialize database, exiting.")
+    sys.exit(1)
+    
 # Insert into MySQL
 def insert_into_db(data_dict):
     try:
