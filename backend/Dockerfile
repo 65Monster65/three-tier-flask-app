@@ -1,3 +1,4 @@
+#stage 1
 FROM python:3.9-slim
 
 # Install system packages
