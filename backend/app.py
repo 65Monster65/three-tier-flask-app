@@ -61,6 +61,7 @@ def initialize_database():
         cursor.close()
         conn.close()
 
+
         # Step 2: Reconnect using database name
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
