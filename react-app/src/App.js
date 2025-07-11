@@ -17,7 +17,6 @@ function App() {
   });
   const [lastFetchTime, setLastFetchTime] = useState(null);
 
-  // Fetch initial data and polling status
   useEffect(() => {
     fetchData();
     checkPollingStatus();
@@ -29,7 +28,6 @@ function App() {
     try {
       const res = await fetch(`${apiBaseUrl}/status`);
       if (!res.ok) throw new Error('Failed to check polling status');
-      
       const status = await res.json();
       setPollingStatus(prev => ({
         ...prev,
@@ -44,7 +42,7 @@ function App() {
     e.preventDefault();
     setLoading(true);
     setMessage({ text: '', type: '' });
-    
+
     try {
       const res = await fetch(`${apiBaseUrl}/start`, {
         method: 'POST',
@@ -55,10 +53,10 @@ function App() {
           duration: Math.max(1, parseInt(duration))
         })
       });
-      
+
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to start polling');
-      
+
       setMessage({ 
         text: `Started polling every ${result.frequency}s for ${result.duration}s`, 
         type: 'success' 
@@ -77,15 +75,14 @@ function App() {
   const fetchData = async () => {
     setLoading(true);
     setMessage({ text: '', type: '' });
-    
+
     try {
       const res = await fetch(`${apiBaseUrl}/data`);
       if (!res.ok) throw new Error('Failed to fetch data');
-      
       const data = await res.json();
       setApiData(data);
       setLastFetchTime(new Date());
-      
+
       if (data.length === 0) {
         setMessage({ 
           text: 'No data available. Start polling to collect responses.', 
@@ -102,39 +99,15 @@ function App() {
     }
   };
 
-  const handleStopPolling = async () => {
-    setLoading(true);
-    setMessage({ text: '', type: '' });
-    
-    try {
-      const res = await fetch(`${apiBaseUrl}/stop`, { method: 'POST' });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'Failed to stop polling');
-      
-      setMessage({ 
-        text: result.message || 'Polling stopped', 
-        type: 'success' 
-      });
-      fetchData();
-    } catch (err) {
-      setMessage({ 
-        text: err.message || 'Failed to stop polling', 
-        type: 'error' 
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleClearData = async () => {
     setLoading(true);
     setMessage({ text: '', type: '' });
-    
+
     try {
       const res = await fetch(`${apiBaseUrl}/clear`, { method: 'DELETE' });
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to clear data');
-      
+
       setApiData([]);
       setLastFetchTime(new Date());
       setMessage({ 
@@ -150,11 +123,6 @@ function App() {
       setLoading(false);
     }
   };
-
-  // Calculate progress percentage for the polling
-  const progressPercentage = pollingStatus.totalLoops > 0 
-    ? ((pollingStatus.currentLoop / pollingStatus.totalLoops) * 100)
-    : 0;
 
   return (
     <div className="app-container">
@@ -215,41 +183,12 @@ function App() {
               </>
             ) : 'Start Polling'}
           </button>
-          
-          {pollingStatus.isActive && (
-            <button 
-              className="btn btn-warning" 
-              onClick={handleStopPolling} 
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span className="loading-spinner"></span>
-                  Stopping...
-                </>
-              ) : 'Stop Polling'}
-            </button>
-          )}
         </div>
       </form>
 
       {message.text && (
         <div className={`message message-${message.type}`}>
           {message.text}
-        </div>
-      )}
-
-      {pollingStatus.isActive && (
-        <div className="polling-progress">
-          {/* <div className="progress-bar-container">
-            <div 
-              className="progress-bar" 
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div> */}
-          <div className="progress-info">
-            {<span>Polling Started...</span>}
-          </div>
         </div>
       )}
 
@@ -297,8 +236,6 @@ function App() {
               <div className="card" key={`${item.timestamp}-${index}`}>
                 <h3>{item.activity || 'No activity name'}</h3>
                 <div className="card-content">
-                  {/* <p><strong>Type:</strong> {item.type || 'N/A'}</p>
-                  <p><strong>Participants:</strong> {item.participants ?? 'N/A'}</p> */}
                   <p><strong>ID:</strong> {index + 1}</p>
                   <p><strong>Time:</strong> {new Date(item.timestamp).toLocaleTimeString()}</p>
                 </div>
@@ -314,6 +251,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
