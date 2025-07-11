@@ -85,6 +85,8 @@ def initialize_database():
         print(f"🔴 DB init error: {err}")
         return False
 
+initialize_database()
+
 # Ensure DB is ready on startup
 if not initialize_database():
     print("🔴 Failed to initialize database, exiting.")
@@ -116,8 +118,6 @@ def poll_api(endpoint, frequency, duration):
     print("🟢 poll_api thread started")
     polling_status["end_time"] = time.time() + duration
 
-    # interval = duration / frequency  # time between each call
-
     for i in range(duration*frequency):
         if not polling_status["isActive"]:
             break
@@ -138,8 +138,6 @@ def poll_api(endpoint, frequency, duration):
         except Exception as e:
             print("🔴 Polling error:", str(e))
 
-        # if i < frequency - 1:
-        #     time.sleep(interval)
 
     polling_status["isActive"] = False
     polling_status["remainingTime"] = 0
