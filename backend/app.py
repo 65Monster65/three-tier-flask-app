@@ -149,6 +149,10 @@ def poll_api(endpoint, frequency, duration):
 
 # Routes
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return {'status': 'ok'}, 200
+
 @app.route("/api/start", methods=["POST"])
 def start_polling():
     if polling_status["isActive"]:
